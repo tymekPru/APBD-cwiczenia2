@@ -1,6 +1,5 @@
 ﻿using APBD_cwiczenia2.Devices;
 using APBD_cwiczenia2.Users;
-using Microsoft.VisualBasic;
 
 namespace APBD_cwiczenia2
 {
@@ -14,21 +13,26 @@ namespace APBD_cwiczenia2
         public DateTime? ReturnDate { get; set; } = null;
         public decimal AdditionalCost { get; set; } = 0;
         public bool IsActive => ReturnDate == null;
-        public decimal ReturnDevice()
+        public decimal ReturnDevice(DateTime? returnDate = null)
         {
-            ReturnDate = DateTime.Now;
+            if (!IsActive)
+                return Device.RentalPrice + AdditionalCost;
+
+            ReturnDate = returnDate ?? DateTime.Now;
             Device.SetAvailable();
-            //Business rule: if more than 14 days late then pay double
-            var difference = ReturnDate - RentDate;
-            if (difference?.Days > 14)
-                AdditionalCost = Device.RentalPrice;
+
+            if (ReturnDate.Value > Deadline)
+            {
+                var lateDays = (ReturnDate.Value.Date - Deadline.Date).Days;
+                AdditionalCost = lateDays * (Device.RentalPrice * 0.10m);
+            }
 
             var totalPrice = Device.RentalPrice + AdditionalCost;
             return totalPrice;
         }
         public override string ToString()
         {
-            return $"[{id}] {User.FirstName} {User.LastName} - {Device.Name} status: {(IsActive ? "Not returned" : "Returned")}, deadline: {Deadline}";
+            return $"[{Id}] {User.FirstName} {User.LastName} - {Device.Name} status: {(IsActive ? "Not returned" : "Returned")}, deadline: {Deadline}";
         }
     }
 }

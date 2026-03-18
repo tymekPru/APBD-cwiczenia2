@@ -15,7 +15,7 @@ namespace APBD_cwiczenia2
             Console.WriteLine("Listing all rentals.");
             _rentalRepo.ListAllRentals();
 
-            Console.WriteLine("Listing all available devices.");
+            Console.WriteLine("Listing all users.");
             _userRepo.ListAllUsers();
         }
     }
