@@ -1,26 +1,21 @@
-﻿namespace APBD_cwiczenia2.Devices
+﻿using System.Data.Common;
+using System.Runtime.InteropServices.Marshalling;
+
+namespace APBD_cwiczenia2.Devices
 {
-    public abstract class Device
+    public abstract class Device(int id, string name, decimal rentalPrice, string description)
     {
-        protected readonly int Id = GenerateId();
-        private static readonly List<int> ids = [];
-
-        public string Name { get; set; }
+        public int Id = id;
+        public string Name { get; } = name;
         public Availability Availability { get; private set; } = Availability.Available;
-        public decimal RentalPrice { get; set; }
-        public string? Description { get; set; }
-
-        private static int GenerateId()
+        public decimal RentalPrice { get; } = rentalPrice;
+        public string Description { get; } = description;
+        protected string BasePrint()
         {
-            if (ids.Count == 0)
-            {
-                ids.Add(1);
-                return 1;
-            }
-            var newId = ids.Max() + 1;
-            ids.Add(newId);
-            return newId;
+            return $"[{id}:{Name}] {Availability} {RentalPrice} zł, ({Description})";
         }
+        public void SetUnavailable() => Availability = Availability.Unavailable;
+        public void SetAvailable() => Availability = Availability.Available;
     }
     public enum Availability
     {
