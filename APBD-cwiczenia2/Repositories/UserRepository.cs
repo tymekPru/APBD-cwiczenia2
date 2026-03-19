@@ -7,6 +7,9 @@ namespace APBD_cwiczenia2.Repositories
     {
         private readonly List<User> _users = [];
         private int _nextId = 1;
+        public User GetById(int id) => _users.FirstOrDefault(u => u.Id == id);
+        public List<User> GetAll() => _users;
+        public int GetNextId() => _nextId;
         public Student AddStudent(string firstName, string lastName, string indexNumber)
         {
             var student = new Student(_nextId++, firstName, lastName, indexNumber);
@@ -23,6 +26,12 @@ namespace APBD_cwiczenia2.Repositories
         {
             _users
                 .ForEach(Console.WriteLine);
+        }
+        public void Restore(List<User> data, int nextId)
+        {
+            _users.Clear();
+            _users.AddRange(data);
+            _nextId = nextId;
         }
     }
 }

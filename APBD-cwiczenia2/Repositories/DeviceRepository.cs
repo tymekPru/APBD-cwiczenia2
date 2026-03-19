@@ -6,6 +6,9 @@ namespace APBD_cwiczenia2.Repositories
     {
         private readonly List<Device> _devices = [];
         private int _nextId = 1;
+        public Device GetById(int id) => _devices.FirstOrDefault(d => d.Id == id);
+        public List<Device> GetAll() => _devices;
+        public int GetNextId() => _nextId;
         public Camera AddCamera(string name, decimal rentalPrice, string description, int mpx, bool hasVideoRecording)
         {
             var camera = new Camera(_nextId++, name, rentalPrice, description, mpx, hasVideoRecording);
@@ -35,6 +38,12 @@ namespace APBD_cwiczenia2.Repositories
                 .Where(x => x.Availability == Availability.Available)
                 .ToList()
                 .ForEach(Console.WriteLine);
+        }
+        public void Restore(List<Device> data, int nextId)
+        {
+            _devices.Clear();
+            _devices.AddRange(data);
+            _nextId = nextId;
         }
     }
 }

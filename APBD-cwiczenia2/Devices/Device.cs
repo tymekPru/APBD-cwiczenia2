@@ -1,8 +1,12 @@
 ﻿using System.Data.Common;
 using System.Runtime.InteropServices.Marshalling;
+using System.Text.Json.Serialization;
 
 namespace APBD_cwiczenia2.Devices
 {
+    [JsonDerivedType(typeof(Laptop), typeDiscriminator: "laptop")]
+    [JsonDerivedType(typeof(Phone), typeDiscriminator: "phone")]
+    [JsonDerivedType(typeof(Camera), typeDiscriminator: "camera")]
     public abstract class Device(int id, string name, decimal rentalPrice, string description)
     {
         public int Id = id;
@@ -12,7 +16,7 @@ namespace APBD_cwiczenia2.Devices
         public string Description { get; } = description;
         protected string BasePrint()
         {
-            return $"[{id}:{Name}] {Availability} {RentalPrice} zł, ({Description})";
+            return $"[{id}:{GetType()}] {Name} {Availability} {RentalPrice} zł, ({Description})";
         }
         public void SetUnavailable() => Availability = Availability.Unavailable;
         public void SetAvailable() => Availability = Availability.Available;

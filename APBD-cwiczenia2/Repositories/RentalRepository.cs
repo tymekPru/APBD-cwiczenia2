@@ -12,6 +12,9 @@ namespace APBD_cwiczenia2.Repositories
         private int _nextId = 1;
         private readonly int MaxRentalsForStudent = 2;
         private readonly int MaxRentalsForEmployee = 5;
+        public Rental GetById(int id) => _rentals.FirstOrDefault(r => r.Id == id);
+        public List<Rental> GetAll() => _rentals;
+        public int GetNextId() => _nextId;
         public Rental RentDevice(Device device, User user, DateTime deadline)
         {
             if (device.Availability == Availability.Unavailable)
@@ -45,6 +48,12 @@ namespace APBD_cwiczenia2.Repositories
                 .Where(x => x.ReturnDate == null && x.Deadline < DateTime.Now)
                 .ToList()
                 .ForEach(Console.WriteLine);
+        }
+        public void Restore(List<Rental> data, int nextId)
+        {
+            _rentals.Clear();
+            _rentals.AddRange(data);
+            _nextId = nextId;
         }
     }
 }
